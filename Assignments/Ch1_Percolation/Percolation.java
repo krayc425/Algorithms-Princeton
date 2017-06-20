@@ -5,9 +5,10 @@ public class Percolation {
     private int n;
     private int openCount;
     
-    //0 as not open, 1 as open
-    private int[][] ids;
+    // false as not open, true as open
+    private boolean[][] ids;
     private WeightedQuickUnionUF uf;
+    private WeightedQuickUnionUF anotherUf;
 
     // create n-by-n grid, with all sites blocked
     public Percolation(int n) {
@@ -16,12 +17,13 @@ public class Percolation {
         }
         this.n = n;
 
-        //last 2 as virtual nodes
+        // last 2 as virtual nodes
         uf = new WeightedQuickUnionUF(n * n + 2); 
-        ids = new int[n][n];
+        anotherUf = new WeightedQuickUnionUF(n * n + 1);
+        ids = new boolean[n][n];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                ids[i][j] = 0;
+                ids[i][j] = false;
             }
         }
     }
@@ -31,14 +33,15 @@ public class Percolation {
         if (isOutOfBounds(row, col)) {
             throw new IndexOutOfBoundsException();
         }
-        if (ids[row - 1][col - 1] == 0) {
-            ids[row - 1][col - 1] = 1;
+        if (!ids[row - 1][col - 1]) {
+            ids[row - 1][col - 1] = true;
             openCount++;
         } else {
             return;
         }
         if (row - 1 == 0) {
             uf.union(n * n, posInUF(row, col));
+            anotherUf.union(n * n, posInUF(row, col));
         }
         if (row - 1 == n - 1) {
             uf.union(n * n + 1, posInUF(row, col));
@@ -46,21 +49,25 @@ public class Percolation {
         if (row > 1) {
             if (isOpen(row - 1, col)) {
                 uf.union(posInUF(row - 1, col), posInUF(row, col));
+                anotherUf.union(posInUF(row - 1, col), posInUF(row, col));
             }
         }
         if (row < n) {
             if (isOpen(row + 1, col)) {
                 uf.union(posInUF(row + 1, col), posInUF(row, col));
+                anotherUf.union(posInUF(row + 1, col), posInUF(row, col));
             }
         }
         if (col > 1) {
             if (isOpen(row, col - 1)) {
                 uf.union(posInUF(row, col - 1), posInUF(row, col));
+                anotherUf.union(posInUF(row, col - 1), posInUF(row, col));
             }
         }
         if (col < n) {
             if (isOpen(row, col + 1)) {
                 uf.union(posInUF(row, col + 1), posInUF(row, col));
+                anotherUf.union(posInUF(row, col + 1), posInUF(row, col));
             }
         }
     }
@@ -70,7 +77,7 @@ public class Percolation {
         if (isOutOfBounds(row, col)) {
             throw new IndexOutOfBoundsException();
         }
-        return ids[row - 1][col - 1] == 1;
+        return ids[row - 1][col - 1];
     }
 
     // is site (row, col) full?
@@ -78,7 +85,8 @@ public class Percolation {
         if (isOutOfBounds(row, col)) {
             throw new IndexOutOfBoundsException();
         }
-        return isOpen(row, col) && uf.connected(n * n, posInUF(row, col));
+        return uf.connected(n * n, posInUF(row, col)) 
+            && anotherUf.connected(n * n, posInUF(row, col));
     }
 
     // number of open sites
