@@ -6,7 +6,7 @@ public class Percolation {
     private int openCount;
     
     // false as not open, true as open
-    private boolean[][] ids;
+    private boolean[] ids;
     private WeightedQuickUnionUF uf;
     private WeightedQuickUnionUF anotherUf;
 
@@ -20,11 +20,9 @@ public class Percolation {
         // last 2 as virtual nodes
         uf = new WeightedQuickUnionUF(n * n + 2); 
         anotherUf = new WeightedQuickUnionUF(n * n + 1);
-        ids = new boolean[n][n];
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                ids[i][j] = false;
-            }
+        ids = new boolean[n * n];
+        for (int i = 0; i < n * n; i++) {
+            ids[i] = false;
         }
     }
 
@@ -33,8 +31,8 @@ public class Percolation {
         if (isOutOfBounds(row, col)) {
             throw new IndexOutOfBoundsException();
         }
-        if (!ids[row - 1][col - 1]) {
-            ids[row - 1][col - 1] = true;
+        if (!ids[posInUF(row, col)]) {
+            ids[posInUF(row, col)] = true;
             openCount++;
         } else {
             return;
@@ -77,7 +75,7 @@ public class Percolation {
         if (isOutOfBounds(row, col)) {
             throw new IndexOutOfBoundsException();
         }
-        return ids[row - 1][col - 1];
+        return ids[posInUF(row, col)];
     }
 
     // is site (row, col) full?

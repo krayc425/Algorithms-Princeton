@@ -7,5 +7,5 @@ Visit on 🔗[Coursera](https://www.coursera.org/learn/algorithms-part1/home).
 ### Ch1 Percolation
 See: [Specification](http://coursera.cs.princeton.edu/algs4/assignments/percolation.html), [CheckList](http://coursera.cs.princeton.edu/algs4/checklists/percolation.html), [Assessment Guide](https://www.coursera.org/learn/algorithms-part1/resources/R2mre).
 
-*Score:* 98/100
+*Score*: 100/100
 
