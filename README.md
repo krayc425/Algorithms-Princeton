@@ -16,3 +16,8 @@ Links: [Specification](http://coursera.cs.princeton.edu/algs4/assignments/queues
 
 *Score*: 100/100
 
+### Assignment3: Pattern Recognition
+Links: [Specification](http://coursera.cs.princeton.edu/algs4/assignments/collinear.html), [CheckList](http://coursera.cs.princeton.edu/algs4/checklists/collinear.html)
+
+*Score*: 100/100
+
